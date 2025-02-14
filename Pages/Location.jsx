@@ -1,13 +1,13 @@
 import { View, Text, StyleSheet } from 'react-native'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import disaster from "../assets/crisis.png"
 import help from "../assets/help.png"
 
 const Location = () => {
-
-    const [markers,setMarkers] = React.useState([]);
+    const [markers,setMarkers] = useState([]);
+    const [region, setRegion] = useState(null);
 
       const helperMarkers = [
         { id: 1, title: "Helper 1", latitude: 10.8505, longitude: 76.2711 },
@@ -16,6 +16,24 @@ const Location = () => {
         { id: 4, title: "Helper 4", latitude: 13.0827, longitude: 80.2707 },
         { id: 5, title: "Helper 5", latitude: 15.3173, longitude: 75.7139 },
       ];
+
+      useEffect(() => {
+        (async () => {
+            let { status } = await Location.requestForegroundPermissionsAsync();
+            if (status !== 'granted') {
+                console.log('Permission to access location was denied');
+                return;
+            }
+
+            let location = await Location.getCurrentPositionAsync({});
+            setRegion({
+                latitude: location.coords.latitude,
+                longitude: location.coords.longitude,
+                latitudeDelta: 0.3,
+                longitudeDelta: 0.3,
+            });
+        })();
+    }, []);
 
 
       useEffect(() => {
@@ -31,6 +49,7 @@ const Location = () => {
                     <MapView
                         provider={PROVIDER_GOOGLE}
                         style={styles.map}
+                        region={region}
                         initialRegion={{
                             latitude: 10.8505, // Kerala's latitude
                             longitude: 76.2711, // Kerala's longitude
