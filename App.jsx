@@ -2,17 +2,30 @@ import React, { useEffect, useState } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
-import * as Notifications from "expo-notifications";
-import * as Device from "expo-device";
 
 
 import Home from "./Pages/Home";
 import Location from "./Pages/Location";
 import Weather from "./Pages/Weather";
+import { requestNotificationPermissions } from "./services/Notification";
+import { setNotificationHandler } from "expo-notifications";
 
 const Tab = createBottomTabNavigator();
 
+setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: false,
+  }),
+});
+
 export default function App() {
+
+  useEffect( () => {
+    requestNotificationPermissions();
+  } )
+
   return (
     <NavigationContainer>
       <Tab.Navigator

@@ -6,6 +6,7 @@ import { ActivityIndicator } from "react-native";
 import { Audio } from 'expo-av';
 import audio from "../assets/eas.mp3"
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import { showNotification } from '../services/Notification';
 
 const Body = ({ handleChange }) => {
     const [fontsLoaded, setFontsLoaded] = useState(false);
@@ -63,7 +64,8 @@ const Body = ({ handleChange }) => {
                 <TouchableOpacity style={s.btn} onPress={() => {
                     playSound()
                     handleChange(true),
-                        onSOS()
+                    onSOS()
+                    showNotification("Calling for help")
                     setTimeout(() => {
                         handleChange(false)
                         stopSound()
