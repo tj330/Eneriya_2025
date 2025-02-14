@@ -14,16 +14,6 @@ const Tab = createBottomTabNavigator();
 export default function App() {
 
   const [sendPushToken, setSendPushToken] = useState("");
-  const [recieverPushToken, setRecieverPushToken] = useState("");
-
-  useEffect(()=>{
-    registerForPushNotificationsAsync().then((token) => {
-      if(token){
-        setSendPushToken(token)
-        console.log(token)
-      }
-    });
-  },[])
 
   return (
     <NavigationContainer>
@@ -49,26 +39,3 @@ export default function App() {
 }
 
 
-async function registerForPushNotificationsAsync() {
-  if (Device.isDevice) {
-    const { status: existingStatus } = await Notifications.getPermissionsAsync();
-    let finalStatus = existingStatus;
-
-    if (existingStatus !== "granted") {
-      const { status } = await Notifications.requestPermissionsAsync();
-      finalStatus = status;
-    }
-
-    if (finalStatus !== "granted") {
-      Alert.alert("Error", "Failed to get push token!");
-      return null;
-    }
-
-    const token = (await Notifications.getExpoPushTokenAsync()).data;
-    console.log("Expo Push Token:", token);
-    return token;
-  } else {
-    Alert.alert("Error", "Must use a physical device for push notifications.");
-    return null;
-  }
-}
