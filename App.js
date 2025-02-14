@@ -11,8 +11,8 @@ export default function App() {
   useEffect(() => {
     async function loadFonts() {
       await Font.loadAsync({
-        "CustomFont-Regular": require("./assets/fonts/Poppins-Regular.ttf"),
-        "CustomFont-Bold": require("./assets/fonts/Kanit-Bold.ttf"),
+        "Poppins": require("./assets/fonts/Poppins-Regular.ttf"),
+        "Kanit": require("./assets/fonts/Kanit-Bold.ttf"),
       });
       setFontsLoaded(true);
     }
@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   footerText: {
-    fontFamily: "CustomFont-Regular",
+    fontFamily: "Poppins",
     fontSize: 18,
   },
   loader: {

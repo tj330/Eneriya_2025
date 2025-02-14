@@ -1,8 +1,27 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native'
-import React from 'react'
+import React,{useState,useEffect} from 'react'
 import circle from "../assets/circle.png"
+import * as Font from "expo-font";
+import { ActivityIndicator } from "react-native";
 
 const Body = () => {
+      const [fontsLoaded, setFontsLoaded] = useState(false);
+    
+      useEffect(() => {
+        async function loadFonts() {
+          await Font.loadAsync({
+            "Poppins": require("../assets/fonts/Poppins-Regular.ttf"),
+            "Kanit": require("../assets/fonts/Kanit-Bold.ttf"),
+          });
+          setFontsLoaded(true);
+        }
+    
+        loadFonts();
+      }, []);
+    
+      if (!fontsLoaded) {
+        return <ActivityIndicator size="large" style={s.loader} />;
+      }
     return (
         <View style={s.container}>
             <View style={s.c1}>
@@ -59,10 +78,12 @@ const s = StyleSheet.create({
     title: {
         fontSize: 30,
         fontWeight: 'bold',
-        marginBottom: 20
+        marginBottom: 20,
+        fontFamily:'Kanit'
     },
     desc: {
         fontSize: 20,
+        fontFamily:'Poppins'
     },
     sos: {
         position: 'absolute',
@@ -77,5 +98,10 @@ const s = StyleSheet.create({
         display: 'flex', 
         alignItems: 'center', 
         justifyContent: 'center'
-    }
+    },
+    loader: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+      },
 })
