@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet } from 'react-native'
 import React from 'react'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
-import MapView, { Marker } from "react-native-maps";
+import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import disaster from "../assets/crisis.png"
 import help from "../assets/help.png"
 
@@ -30,6 +30,7 @@ const Location = () => {
             <SafeAreaView style={{flex:1}}>
                 <View style={styles.container}>
                     <MapView
+                        provider={PROVIDER_GOOGLE}
                         style={styles.map}
                         initialRegion={{
                             latitude: 10.8505, // Kerala's latitude
