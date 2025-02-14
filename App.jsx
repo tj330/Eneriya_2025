@@ -8,13 +8,11 @@ import * as Device from "expo-device";
 
 import Home from "./Pages/Home";
 import Location from "./Pages/Location";
+import Weather from "./Pages/Weather";
 
 const Tab = createBottomTabNavigator();
 
 export default function App() {
-
-  const [sendPushToken, setSendPushToken] = useState("");
-
   return (
     <NavigationContainer>
       <Tab.Navigator
@@ -24,6 +22,7 @@ export default function App() {
             let iconName;
             if (route.name === "Home") iconName = "home-outline";
             else if (route.name === "Location") iconName = "location-outline";
+            else if(route.name === "Info") iconName = "cloud-outline";
 
             return <Ionicons name={iconName} size={size} color={color} />;
           },
@@ -33,6 +32,7 @@ export default function App() {
       >
         <Tab.Screen name="Home" component={Home} />
         <Tab.Screen name="Location" component={Location} />
+        <Tab.Screen name="Info" component={Weather}/>
       </Tab.Navigator>
     </NavigationContainer>
   );
