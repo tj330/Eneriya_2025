@@ -1,28 +1,57 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native'
-import React,{useState,useEffect} from 'react'
-import circle from "../assets/circle.png"
+import { View, Text, StyleSheet, Image, TouchableOpacity, Linking } from 'react-native'
+import React, { useState, useEffect } from 'react'
+import circle from "../assets/sos.png"
 import * as Font from "expo-font";
 import { ActivityIndicator } from "react-native";
+import { Audio } from 'expo-av';
+import audio from "../assets/eas.mp3"
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { showNotification } from '../services/Notification';
 
-const Body = ({handleChange}) => {
-      const [fontsLoaded, setFontsLoaded] = useState(false);
-    
-      useEffect(() => {
-        async function loadFonts() {
-          await Font.loadAsync({
-            "Poppins": require("../assets/fonts/Poppins-Regular.ttf"),
-            "Kanit": require("../assets/fonts/Kanit-Bold.ttf"),
-          });
-          setFontsLoaded(true);
+const Body = ({ handleChange }) => {
+    const [fontsLoaded, setFontsLoaded] = useState(false);
+
+
+    const [sound, setSound] = useState(null)
+
+    const playSound = async () => {
+        try {
+            const { sound } = await Audio.Sound.createAsync(audio)
+            setSound(sound)
+
+            await sound.playAsync()
+        } catch (error) {
+            console.log(error)
         }
-    
+    }
+
+    const stopSound = async () => {
+        if (sound) {
+            await sound.stopAsync();
+        }
+    };
+
+    const onSOS = () => {
+        const phn = "tel:112"
+
+        Linking.openURL(phn)
+    }
+
+    useEffect(() => {
+        async function loadFonts() {
+            await Font.loadAsync({
+                "Poppins": require("../assets/fonts/Poppins-Regular.ttf"),
+                "Kanit": require("../assets/fonts/Kanit-Bold.ttf"),
+            });
+            setFontsLoaded(true);
+        }
+
         loadFonts();
-      }, []);
-    
-      if (!fontsLoaded) {
+    }, []);
+
+    if (!fontsLoaded) {
         return <ActivityIndicator size="large" style={s.loader} />;
-      }
+    }
     return (
         <View style={s.container}>
             <View style={s.c1}>
@@ -33,15 +62,21 @@ const Body = ({handleChange}) => {
             </View>
             <View style={s.c2}>
                 <TouchableOpacity style={s.btn} onPress={() => {
+                    playSound()
                     handleChange(true),
-                    showNotification("Distress Call")
+                    onSOS()
+                    showNotification("Calling for help")
                     setTimeout(() => {
                         handleChange(false)
+                        stopSound()
 
-                    },5000)
+                    }, 5000)
                 }}>
                     <Image source={circle} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
-                    <Text style={s.sos}>SOS</Text>
+                    {/* <View style={{display:'flex',alignItems:'center',justifyContent:'center',width:'100%',height:'100%',position:'absolute'}}>
+                        <FontAwesome name="bell" size={24} color="white" />
+                        <Text style={s.sos}>SOS</Text>
+                    </View> */}
                 </TouchableOpacity>
             </View>
         </View>
@@ -77,33 +112,33 @@ const s = StyleSheet.create({
         justifyContent: 'center',
     },
     title: {
-        fontSize: 30,
+        fontSize: 20,
         fontWeight: 'bold',
-        marginBottom: 20,
-        fontFamily:'Kanit'
+        marginBottom: 10,
+        fontFamily: 'Kanit'
     },
     desc: {
-        fontSize: 20,
-        fontFamily:'Poppins'
+        fontSize: 16,
+        fontFamily: 'Poppins'
     },
     sos: {
         position: 'absolute',
         fontWeight: 'bold',
         fontSize: 80,
         color: 'white',
-        fontFamily:'Kanit'
+        fontFamily: 'Kanit'
     },
     btn: {
-        width: "100%", 
-        height: "100%", 
-        position: 'relative', 
-        display: 'flex', 
-        alignItems: 'center', 
+        width: "100%",
+        height: "100%",
+        position: 'relative',
+        display: 'flex',
+        alignItems: 'center',
         justifyContent: 'center'
     },
     loader: {
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
-      },
+    },
 })
