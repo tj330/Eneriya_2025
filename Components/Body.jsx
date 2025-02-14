@@ -3,6 +3,7 @@ import React,{useState,useEffect} from 'react'
 import circle from "../assets/circle.png"
 import * as Font from "expo-font";
 import { ActivityIndicator } from "react-native";
+import { showNotification } from '../services/Notification';
 
 const Body = ({handleChange}) => {
       const [fontsLoaded, setFontsLoaded] = useState(false);
@@ -33,6 +34,7 @@ const Body = ({handleChange}) => {
             <View style={s.c2}>
                 <TouchableOpacity style={s.btn} onPress={() => {
                     handleChange(true),
+                    showNotification("Distress Call")
                     setTimeout(() => {
                         handleChange(false)
 
