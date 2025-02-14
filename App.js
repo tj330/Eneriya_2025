@@ -1,70 +1,34 @@
-import { useState, useEffect } from "react";
-import { StyleSheet, View, Text, ActivityIndicator } from "react-native";
-import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import * as Font from "expo-font";
-import Header from "./Components/Header";
-import Body from "./Components/Body";
+import React from "react";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { NavigationContainer } from "@react-navigation/native";
+import { Ionicons } from "@expo/vector-icons";
+
+
+import Home from "./Pages/Home";
+import Location from "./Pages/Location";
+
+const Tab = createBottomTabNavigator();
 
 export default function App() {
-  const [fontsLoaded, setFontsLoaded] = useState(false);
-
-  useEffect(() => {
-    async function loadFonts() {
-      await Font.loadAsync({
-        "Poppins": require("./assets/fonts/Poppins-Regular.ttf"),
-        "Kanit": require("./assets/fonts/Kanit-Bold.ttf"),
-      });
-      setFontsLoaded(true);
-    }
-
-    loadFonts();
-  }, []);
-
-  if (!fontsLoaded) {
-    return <ActivityIndicator size="large" style={styles.loader} />;
-  }
-
   return (
-    <SafeAreaProvider>
-      <SafeAreaView style={styles.container}>
-        <View style={styles.header}>
-          <Header />
-        </View>
-        <View style={styles.body}>
-          <Body />
-        </View>
-        <View style={styles.footer}>
-          <Text style={styles.footerText}>Footer</Text>
-        </View>
-      </SafeAreaView>
-    </SafeAreaProvider>
+    <NavigationContainer>
+      <Tab.Navigator
+        screenOptions={({ route }) => ({
+          headerShown: false,
+          tabBarIcon: ({ color, size }) => {
+            let iconName;
+            if (route.name === "Home") iconName = "home-outline";
+            else if (route.name === "Location") iconName = "location-outline";
+
+            return <Ionicons name={iconName} size={size} color={color} />;
+          },
+          tabBarActiveTintColor: "tomato",
+          tabBarInactiveTintColor: "gray",
+        })}
+      >
+        <Tab.Screen name="Home" component={Home} />
+        <Tab.Screen name="Location" component={Location} />
+      </Tab.Navigator>
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-  },
-  header: {
-    height: 60,
-    justifyContent: "center",
-  },
-  body: {
-    flex: 1,
-  },
-  footer: {
-    height: 50,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  footerText: {
-    fontFamily: "Poppins",
-    fontSize: 18,
-  },
-  loader: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-});

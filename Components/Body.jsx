@@ -4,7 +4,7 @@ import circle from "../assets/circle.png"
 import * as Font from "expo-font";
 import { ActivityIndicator } from "react-native";
 
-const Body = () => {
+const Body = ({handleChange}) => {
       const [fontsLoaded, setFontsLoaded] = useState(false);
     
       useEffect(() => {
@@ -29,12 +29,15 @@ const Body = () => {
                     <Text style={s.title}>Are you in an Emergency?</Text>
                     <Text style={s.desc}>Press the SOS button we are here to help you!</Text>
                 </View>
-                <View style={s.r2}>
-                    <Text>Body</Text>
-                </View>
             </View>
             <View style={s.c2}>
-                <TouchableOpacity style={s.btn} onPress={() => alert('SOS Button Pressed')}>
+                <TouchableOpacity style={s.btn} onPress={() => {
+                    handleChange(true),
+                    setTimeout(() => {
+                        handleChange(false)
+
+                    },5000)
+                }}>
                     <Image source={circle} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
                     <Text style={s.sos}>SOS</Text>
                 </TouchableOpacity>
@@ -55,25 +58,21 @@ const s = StyleSheet.create({
     },
     c1: {
         width: "100%",
-        height: '50%',
+        height: '30%',
         display: 'flex',
         flexDirection: 'row',
     },
     c2: {
         width: "100%",
-        height: '50%',
+        height: '70%',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
     },
     r1: {
-        width: "70%",
+        width: "100%",
         height: '100%',
-        justifyContent: 'center'
-    },
-    r2: {
-        width: "30%",
-        height: '100%',
+        justifyContent: 'center',
     },
     title: {
         fontSize: 30,
@@ -90,6 +89,7 @@ const s = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 80,
         color: 'white',
+        fontFamily:'Kanit'
     },
     btn: {
         width: "100%", 
