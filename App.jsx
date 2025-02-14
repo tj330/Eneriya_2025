@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
-import * as Notifications from "expo-notifications";
-import * as Device from "expo-device";
+import { getCurrentPositionAsync, requestForegroundPermissionsAsync } from 'expo-location';
 
 
 import Home from "./Pages/Home";
@@ -13,6 +12,23 @@ import Weather from "./Pages/Weather";
 const Tab = createBottomTabNavigator();
 
 export default function App() {
+
+  const [location, setLocation] = useState(null);
+
+  useEffect(() => {
+    getCoord()
+  }, [])
+
+  async function getCoord() {
+    const { status } = await requestForegroundPermissionsAsync()
+    if (status == 'granted') {
+      const loc = await getCurrentPositionAsync()
+      setLocation({ lon: loc.coords.longitude, lat: loc.coords.latitude })
+    } else {
+      setLocation({ lon: 0, lat: 0 })
+    }
+  }
+
   return (
     <NavigationContainer>
       <Tab.Navigator
@@ -31,8 +47,8 @@ export default function App() {
         })}
       >
         <Tab.Screen name="Home" component={Home} />
-        <Tab.Screen name="Location" component={Location} />
-        <Tab.Screen name="Info" component={Weather}/>
+        <Tab.Screen name="Location" component={Location}/>
+        <Tab.Screen name="Info" component={Weather} initialParams={location}/>
       </Tab.Navigator>
     </NavigationContainer>
   );

@@ -4,6 +4,7 @@ import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import MapView, { Marker } from "react-native-maps";
 import disaster from "../assets/crisis.png"
 import help from "../assets/help.png"
+import { getCurrentPositionAsync, requestForegroundPermissionsAsync } from 'expo-location';
 
 const Location = () => {
 

@@ -96,6 +96,8 @@ const s = StyleSheet.create({
         height: '30%',
         display: 'flex',
         flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     c2: {
         width: "100%",
@@ -108,6 +110,9 @@ const s = StyleSheet.create({
         width: "100%",
         height: '100%',
         justifyContent: 'center',
+        backgroundColor:'rgba(215, 210, 210, 0.97)',
+        borderRadius:20,
+        padding:20
     },
     title: {
         fontSize: 20,

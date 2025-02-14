@@ -1,9 +1,10 @@
 import { View, Text, StyleSheet, Image } from 'react-native'
-import React from 'react'
+import React, { useEffect } from 'react'
 import logo from "../assets/logo.png"
 import Entypo from '@expo/vector-icons/Entypo';
 
 const Header = () => {
+
   return (
     <View style={s.hcontainer}>
           <View style={s.header}>
