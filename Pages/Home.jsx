@@ -3,10 +3,18 @@ import React from 'react'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import Body from '../Components/Body'
 import Header from '../Components/Header'
+import socket from '../services/socket'
+import { showNotification } from '../services/Notification'
 
-const Home = () => {
-
+const Home = ({route}) => {
     const [buttonClicked, setButtonClicked] = React.useState(false);
+
+  const handleButtonClicked = (e) => {
+    setButtonClicked(e);
+    const { lat, lon } = route.params;
+    socket.emit("distress", { lat, lon });
+    showNotification("Calling for help")
+  }
 
   return (
     <SafeAreaProvider>
@@ -15,7 +23,7 @@ const Home = () => {
           <Header />
         </View>
         <View style={styles.body}>
-          <Body handleChange={setButtonClicked} btnSts={buttonClicked}/>
+          <Body handleChange={handleButtonClicked} btnSts={buttonClicked}/>
         </View>
       </SafeAreaView>
     </SafeAreaProvider>

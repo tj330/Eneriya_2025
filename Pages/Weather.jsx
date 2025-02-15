@@ -12,7 +12,7 @@ const Weather = ({route}) => {
             .then((data) => {
                 setWeather(data);
             });
-    }, [])
+    }, [route.params])
 
     return (
         <SafeAreaProvider>

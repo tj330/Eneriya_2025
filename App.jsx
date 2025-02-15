@@ -8,8 +8,12 @@ import { getCurrentPositionAsync, requestForegroundPermissionsAsync } from 'expo
 import Home from "./Pages/Home";
 import Location from "./Pages/Location";
 import Weather from "./Pages/Weather";
-import { requestNotificationPermissions } from "./services/Notification";
+import { requestNotificationPermissions, showNotification } from "./services/Notification";
 import { setNotificationHandler } from "expo-notifications";
+import socket from "./services/socket";
+
+import audio from "./assets/eas.mp3"
+import { Audio } from "expo-av";
 
 const Tab = createBottomTabNavigator();
 
@@ -23,11 +27,20 @@ setNotificationHandler({
 
 export default function App() {
 
-  const [location, setLocation] = useState(null);
+  const [location, setLocation] = useState({ lon: 0, lat: 0 });
 
   useEffect(() => {
     getCoord()
     requestNotificationPermissions();
+
+    const handleDistressSignal = ( data ) => {
+      console.log(data);
+      Audio.Sound.createAsync(audio);
+      showNotification(data)
+    }
+    socket.on("distress",handleDistressSignal);
+
+    return () => socket.off(handleDistressSignal);
   }, [])
 
   async function getCoord() {
@@ -57,12 +70,11 @@ export default function App() {
           tabBarInactiveTintColor: "gray",
         })}
       >
-        <Tab.Screen name="Home" component={Home} />
+        <Tab.Screen name="Home" component={Home} initialParams={location}/>
         <Tab.Screen name="Location" component={Location}/>
         <Tab.Screen name="Info" component={Weather} initialParams={location}/>
       </Tab.Navigator>
     </NavigationContainer>
   );
 }
-
 
