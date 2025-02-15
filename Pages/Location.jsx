@@ -4,6 +4,7 @@ import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import disaster from "../assets/crisis.png"
 import help from "../assets/help.png"
+import * as LocationAPI from 'expo-location'
 
 const Location = () => {
     const [markers,setMarkers] = useState([]);
@@ -19,13 +20,13 @@ const Location = () => {
 
       useEffect(() => {
         (async () => {
-            let { status } = await Location.requestForegroundPermissionsAsync();
+            let { status } = await LocationAPI.requestForegroundPermissionsAsync();
             if (status !== 'granted') {
                 console.log('Permission to access location was denied');
                 return;
             }
 
-            let location = await Location.getCurrentPositionAsync({});
+            let location = await LocationAPI.getCurrentPositionAsync({});
             setRegion({
                 latitude: location.coords.latitude,
                 longitude: location.coords.longitude,
