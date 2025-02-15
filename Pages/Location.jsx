@@ -1,42 +1,31 @@
 import { View, Text, StyleSheet } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import help from '../assets/help.png';
 import disaster from '../assets/crisis.png';
-import * as LocationAPI from 'expo-location';
+import { MarkersContext } from '../context/MarkersContext';
 
 const Location = () => {
-  const [markers, setMarkers] = useState([]);
-  const [region, setRegion] = useState(null);
+  const { location, markers, helpers, addHelperMarker } = useContext(MarkersContext);
+  const [region, setRegion] = useState({
+    latitude: location.lat,
+    longitude: location.lon,
+    latitudeDelta: 0.3,
+    longitudeDelta: 0.3,
+  });
 
   useEffect(() => {
-    (async () => {
-      let { status } = await LocationAPI.requestForegroundPermissionsAsync();
-      if (status !== 'granted') {
-        console.log('Permission to access location was denied');
-        return;
-      }
-
-      let location = await LocationAPI.getCurrentPositionAsync({});
-      setRegion({
-        latitude: location.coords.latitude,
-        longitude: location.coords.longitude,
-        latitudeDelta: 0.3,
-        longitudeDelta: 0.3,
-      });
-
-      // Set a single marker with the current location
-      setMarkers([
-        {
-          lat: location.coords.latitude,
-          lon: location.coords.longitude,
-          type: 'Current Location',
-          id: 'current',
-        },
-      ]);
-    })();
-  }, []);
+    setRegion({
+      latitude: location.lat,
+      longitude: location.lon,
+      latitudeDelta: 0.3,
+      longitudeDelta: 0.3,
+    });
+    const { lat, lon } = location;
+    const id = "volunteer"
+    addHelperMarker( { id, lat, lon } )
+  }, [location]);
 
   return (
     <SafeAreaProvider>
@@ -59,6 +48,14 @@ const Location = () => {
                 title={marker.type}
                 key={marker.id.toString()}
                 image={disaster}
+              />
+            ))}
+            {helpers.map((helper) => (
+              <Marker
+                coordinate={{ latitude: helper.lat, longitude: helper.lon }}
+                title={helper.title}
+                key={helper.id.toString()}
+                image={help}
               />
             ))}
           </MapView>

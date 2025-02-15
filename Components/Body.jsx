@@ -5,8 +5,6 @@ import * as Font from "expo-font";
 import { ActivityIndicator } from "react-native";
 import { Audio } from 'expo-av';
 import audio from "../assets/eas.mp3"
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { showNotification } from '../services/Notification';
 import { useNavigation } from '@react-navigation/native';
 
 const Body = ({ handleChange }) => {

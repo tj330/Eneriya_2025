@@ -1,20 +1,27 @@
-import { View, Text ,StyleSheet} from 'react-native'
-import React from 'react'
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
-import Body from '../Components/Body'
-import Header from '../Components/Header'
-import socket from '../services/socket'
-import { showNotification } from '../services/Notification'
+import { View, Text, StyleSheet } from 'react-native';
+import React, { useContext } from 'react';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import Body from '../Components/Body';
+import Header from '../Components/Header';
+import socket from '../services/socket';
+import { showNotification } from '../services/Notification';
+import { MarkersContext } from '../context/MarkersContext';
 
-const Home = ({route}) => {
-    const [buttonClicked, setButtonClicked] = React.useState(false);
+const message = "Help me! I am in danger";
+
+const Home = () => {
+  const [buttonClicked, setButtonClicked] = React.useState(false);
+  const { location, addDistressMarker, clearHelperMarker } = useContext(MarkersContext);
 
   const handleButtonClicked = (e) => {
     setButtonClicked(e);
-    const { lat, lon } = route.params;
-    socket.emit("send_distress", { lat, lon });
-    showNotification("Calling for help"+" "+lat+" "+lon);
-  }
+    if (e) {
+      socket.emit("send_distress", { message, lat: location.lat, lon: location.lon });
+      showNotification("Calling for help", `${location.lat}, ${location.lon}`, "panic://location");
+      addDistressMarker({ id: Date.now(), lat: location.lat, lon: location.lon, type: "Distress" });
+      clearHelperMarker()
+    }
+  };
 
   return (
     <SafeAreaProvider>
@@ -23,14 +30,14 @@ const Home = ({route}) => {
           <Header />
         </View>
         <View style={styles.body}>
-          <Body handleChange={handleButtonClicked} btnSts={buttonClicked}/>
+          <Body handleChange={handleButtonClicked} btnSts={buttonClicked} />
         </View>
       </SafeAreaView>
     </SafeAreaProvider>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;
 
 const styles = StyleSheet.create({
   container: {
