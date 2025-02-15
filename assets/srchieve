@@ -1,0 +1,105 @@
+
+  // useEffect(() => {
+  //   // Start advertising the device so others can discover it
+  //   NearbyConnections.startAdvertise("Device name")
+  //     .then((peerId) => {
+  //       setMyPeerId(peerId);
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+
+  //   // Start discovering nearby devices automatically when app starts
+  //   NearbyConnections.startDiscovery("My Device Name Or ID")
+  //     .then((peerId) => {
+  //       setMyPeerId(peerId);
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+
+  //   // Clean up advertising and discovery when the component unmounts
+  //   return () => {
+  //     NearbyConnections.stopAdvertise();
+  //     NearbyConnections.stopDiscovery();
+  //   };
+  // }, []);
+
+  // useEffect(() => {
+  //   // Automatically accept incoming connection requests from nearby devices
+  //   const onInvitationListener = NearbyConnections.onInvitationReceived((data) => {
+  //     console.log("Invitation received from: ", data.peerId);
+  //     NearbyConnections.acceptConnection(data.peerId)
+  //       .then(() => {
+  //         setConnectedPeerId(data.peerId);
+  //         console.log("Connection accepted with: ", data.peerId);
+  //       })
+  //       .catch((error) => {
+  //         console.log("Error accepting connection: ", error);
+  //       });
+  //   });
+
+  //   // Handler when the device is successfully connected to another device
+  //   const onConnectedListener = NearbyConnections.onConnected((data) => {
+  //     console.log("Connected to: ", data.peerId);
+  //   });
+
+  //   // Handler when the device is disconnected from another device
+  //   const onDisconnectedListener = NearbyConnections.onDisconnected((data) => {
+  //     console.log("Disconnected from: ", data.peerId);
+  //     setConnectedPeerId(null); // Reset the connected peer ID
+  //   });
+
+  //   return () => {
+  //     onInvitationListener();
+  //     onConnectedListener();
+  //     onDisconnectedListener();
+  //   };
+  // }, []);
+
+  // useEffect(() => {
+  //   // Handler when a nearby peer is found
+  //   const onPeerFoundListener = NearbyConnections.onPeerFound((data) => {
+  //     setDiscoveredPeers((peers) => [...peers, data]);
+  //   });
+
+  //   // Handler when a nearby peer is lost
+  //   const onPeerLostListener = NearbyConnections.onPeerLost((data) => {
+  //     setDiscoveredPeers((peers) => peers.filter((peer) => peer.peerId !== data.peerId));
+  //   });
+
+  //   return () => {
+  //     onPeerFoundListener();
+  //     onPeerLostListener();
+  //   };
+  // }, []);
+
+  // useEffect(() => {
+  //   // Handle received text messages (distress calls) from connected peers
+  //   const onTextReceivedListener = NearbyConnections.onTextReceived((data) => {
+  //     setMessages((prevMessages) => [
+  //       ...prevMessages,
+  //       {
+  //         peerId: data.peerId,
+  //         text: data.text,
+  //       },
+  //     ]);
+  //   });
+
+  //   return () => {
+  //     onTextReceivedListener();
+  //   };
+  // }, []);
+
+  // // Handle sending distress calls (text messages) to connected peers
+  // const handleSendText = (message) => {
+  //   if (connectedPeerId) {
+  //     NearbyConnections.sendText(connectedPeerId, message)
+  //       .then(() => {
+  //         console.log("Distress call sent to peer:", connectedPeerId);
+  //       })
+  //       .catch((error) => {
+  //         console.log("Error sending distress call:", error);
+  //       });
+  //   }
+  // };

@@ -8,8 +8,18 @@ import { getCurrentPositionAsync, requestForegroundPermissionsAsync } from 'expo
 import Home from "./Pages/Home";
 import Location from "./Pages/Location";
 import Weather from "./Pages/Weather";
+import { requestNotificationPermissions } from "./services/Notification";
+import { setNotificationHandler } from "expo-notifications";
 
 const Tab = createBottomTabNavigator();
+
+setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: false,
+  }),
+});
 
 export default function App() {
 
@@ -17,6 +27,7 @@ export default function App() {
 
   useEffect(() => {
     getCoord()
+    requestNotificationPermissions();
   }, [])
 
   async function getCoord() {
