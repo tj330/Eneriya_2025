@@ -7,12 +7,12 @@ import { Audio } from 'expo-av';
 import audio from "../assets/eas.mp3"
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { showNotification } from '../services/Notification';
+import { useNavigation } from '@react-navigation/native';
 
 const Body = ({ handleChange }) => {
     const [fontsLoaded, setFontsLoaded] = useState(false);
-
-
     const [sound, setSound] = useState(null)
+    const navigation = useNavigation();
 
     const playSound = async () => {
         try {
@@ -31,11 +31,11 @@ const Body = ({ handleChange }) => {
         }
     };
 
-    const onSOS = () => {
-        const phn = "tel:112"
+    // const onSOS = () => {
+    //     const phn = "tel:112"
 
-        Linking.openURL(phn)
-    }
+    //     Linking.openURL(phn)
+    // }
 
     useEffect(() => {
         async function loadFonts() {
@@ -64,11 +64,10 @@ const Body = ({ handleChange }) => {
                 <TouchableOpacity style={s.btn} onPress={() => {
                     playSound()
                     handleChange(true),
-                    onSOS()
                     setTimeout(() => {
                         handleChange(false)
                         stopSound()
-
+                        navigation.navigate('Location'); // Navigate to Location tab
                     }, 5000)
                 }}>
                     <Image source={circle} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
