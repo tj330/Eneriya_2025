@@ -13,16 +13,13 @@
       "backgroundColor": "#ffffff"
     },
     "plugins": [
-      [
-        "expo-notifications",
-        {
-          "icon": "./assets/circle.png",
-          "color": "#ffffff"
-        }
-      ]
+      "expo-font"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "runtimeVersion": {
+        "policy": "appVersion"
+      }
     },
     "android": {
       "config": {
@@ -34,14 +31,35 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyDIAkzIV7dcnMefBZvvyxkja2CWkpq-rzA"
+        }
+      },
       "package": "com.anonymous.PANIC",
       "permissions": [
         "RECEIVE_BOOT_COMPLETED",
-        "WAKE_LOCK"
-      ]
+        "WAKE_LOCK",
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION",
+        "RECEIVE_BOOT_COMPLETED",
+        "WAKE_LOCK",
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION"
+      ],
+      "runtimeVersion": "1.0.0"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "dea92502-de8a-4b1b-b054-c2241b8bff9d"
+      }
+    },
+    "owner": "s4xthhhhh",
+    "updates": {
+      "url": "https://u.expo.dev/dea92502-de8a-4b1b-b054-c2241b8bff9d"
     }
   }
 }
