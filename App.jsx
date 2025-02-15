@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
@@ -28,28 +28,46 @@ setNotificationHandler({
 export default function App() {
 
   const [location, setLocation] = useState({ lon: 0, lat: 0 });
+  const locationRef = useRef(location);
 
   useEffect(() => {
-    getCoord()
+    locationRef.current = location;
+  }, [location]);
+
+  useEffect(() => {
+    getCoord();
     requestNotificationPermissions();
 
-    const handleDistressSignal = ( data ) => {
+    const handleDistressSignal = (data) => {
       console.log(data);
       Audio.Sound.createAsync(audio);
-      showNotification(data)
-    }
-    socket.on("receive_distress",handleDistressSignal);
+      const currentLocation = locationRef.current;
+      const message = `Distress signal received: ${data.message}. Location: ${currentLocation.lat}, ${currentLocation.lon}`;
+      showNotification({ ...data, message });
+    };
+    socket.on("receive_distress", handleDistressSignal);
 
-    return () => socket.off(handleDistressSignal);
+    return () => {
+      socket.off("receive_distress", handleDistressSignal);
+    };
   }, [])
 
   async function getCoord() {
-    const { status } = await requestForegroundPermissionsAsync()
-    if (status == 'granted') {
-      const loc = await getCurrentPositionAsync()
-      setLocation({ lon: loc.coords.longitude, lat: loc.coords.latitude })
-    } else {
-      setLocation({ lon: 0, lat: 0 })
+    try {
+      const { status } = await requestForegroundPermissionsAsync();
+      if (status === 'granted') {
+        console.log("Permission granted");
+        const loc = await getCurrentPositionAsync();
+        console.log(loc.coords.longitude, loc.coords.latitude);
+        setLocation({ lon: loc.coords.longitude, lat: loc.coords.latitude });
+      } else {
+        setLocation({ lon: 0, lat: 0 });
+      }
+
+      console.log(location);
+    } catch (error) {
+      console.error("Error getting location:", error);
+      setLocation({ lon: 0, lat:0});
     }
   }
 
@@ -70,9 +88,9 @@ export default function App() {
           tabBarInactiveTintColor: "gray",
         })}
       >
-        <Tab.Screen name="Home" component={Home} initialParams={location}/>
-        <Tab.Screen name="Location" component={Location}/>
-        <Tab.Screen name="Info" component={Weather} initialParams={location}/>
+        <Tab.Screen name="Home" component={Home} initialParams={locationRef.current} />
+        <Tab.Screen name="Location" component={Location} initialParams={ locationRef.current } />
+        <Tab.Screen name="Info" component={Weather} initialParams={locationRef.current} />
       </Tab.Navigator>
     </NavigationContainer>
   );
