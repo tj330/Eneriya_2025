@@ -38,7 +38,7 @@ export default function App() {
       Audio.Sound.createAsync(audio);
       showNotification(data)
     }
-    socket.on("distress",handleDistressSignal);
+    socket.on("receive_distress",handleDistressSignal);
 
     return () => socket.off(handleDistressSignal);
   }, [])

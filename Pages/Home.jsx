@@ -12,7 +12,7 @@ const Home = ({route}) => {
   const handleButtonClicked = (e) => {
     setButtonClicked(e);
     const { lat, lon } = route.params;
-    socket.emit("distress", { lat, lon });
+    socket.emit("send_distress", { lat, lon });
     showNotification("Calling for help")
   }
 

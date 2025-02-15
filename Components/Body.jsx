@@ -65,7 +65,6 @@ const Body = ({ handleChange }) => {
                     playSound()
                     handleChange(true),
                     onSOS()
-                    showNotification("Calling for help")
                     setTimeout(() => {
                         handleChange(false)
                         stopSound()
